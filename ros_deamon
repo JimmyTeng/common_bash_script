@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Daemon function
+ros_deamon() {
+  while true; do
+    # Check if the roscore process is running
+    if ! pgrep -x roscore > /dev/null 2>&1; then
+      echo "roscore is not running, attempting to start roscore..."
+      # Start roscore
+      nohup /opt/ros/noetic/bin/roscore > /dev/null 2>&1 &
+      if [ $? -ne 0 ]; then
+        echo "Failed to start roscore, please check the environment configuration!"
+      else
+        echo "roscore started successfully."
+      fi
+    fi
+    # Check every 5 seconds
+    sleep 5
+  done
+}
+
+# Run the daemon function in the background
+ros_deamon &
